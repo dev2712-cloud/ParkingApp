@@ -13,33 +13,23 @@
         android:text="Welcome Back!"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
+        android:textColor="@color/black"
         android:layout_marginBottom="8dp"/>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login to continue to CrowdPark"
+        android:text="Login to continue"
         android:textSize="16sp"
         android:layout_marginBottom="40dp"/>
 
     <EditText
-        android:id="@+id/etEmail"
+        android:id="@+id/etFullName"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:background="@android:drawable/edit_text"
-        android:hint="Email Address"
-        android:inputType="textEmailAddress"
-        android:paddingStart="12dp"
-        android:layout_marginBottom="16dp"/>
-
-    <EditText
-        android:id="@+id/etPhoneNumber"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@android:drawable/edit_text"
-        android:hint="Phone Number"
-        android:inputType="phone"
+        android:hint="Full Name"
+        android:inputType="textPersonName"
         android:paddingStart="12dp"
         android:layout_marginBottom="16dp"/>
 
@@ -67,7 +57,7 @@
         android:id="@+id/tvGoToRegister"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New to CrowdPark? Register Here"
+        android:text="New User? Register Here"
         android:textSize="16sp"
         android:textColor="@color/purple_500"
         android:layout_marginTop="20dp"

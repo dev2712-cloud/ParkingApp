@@ -17,12 +17,14 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup roleRadioGroup;
     TextView tvGoToLogin;
 
+    // UPDATED: Using DatabaseHelper
+    DatabaseHelper DB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register); // This links to your XML
+        setContentView(R.layout.activity_register);
 
-        // 1. Initialize Views (Connect Java to XML)
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etEmail);
         etPassword = findViewById(R.id.etPassword);
@@ -31,30 +33,43 @@ public class MainActivity extends AppCompatActivity {
         roleRadioGroup = findViewById(R.id.roleRadioGroup);
         tvGoToLogin = findViewById(R.id.tvGoToLogin);
 
-        // 2. Handle Register Button Click
+        // UPDATED: Initialize DatabaseHelper
+        DB = new DatabaseHelper(this);
+
         btnRegister.setOnClickListener(v -> {
-            String email = etEmail.getText().toString().trim();
-            String password = etPassword.getText().toString().trim();
+            String user = etEmail.getText().toString();
+            String pass = etPassword.getText().toString();
+            String name = etFullName.getText().toString();
+            String phone = etPhone.getText().toString();
 
-            if (TextUtils.isEmpty(email)) {
-                etEmail.setError("Email is required.");
+            if(TextUtils.isEmpty(user) || TextUtils.isEmpty(pass) || TextUtils.isEmpty(name)) {
+                Toast.makeText(MainActivity.this, "All fields required", Toast.LENGTH_SHORT).show();
                 return;
             }
-            if (password.length() < 6) {
-                etPassword.setError("Password must be >= 6 characters.");
-                return;
+
+            String role = "Driver";
+            int selectedId = roleRadioGroup.getCheckedRadioButtonId();
+            if (selectedId == R.id.rbOwner) role = "Owner";
+            else if (selectedId == R.id.rbAdmin) role = "Admin";
+
+            Boolean checkUser = DB.checkEmail(user);
+            if(!checkUser){
+                Boolean insert = DB.insertData(user, pass, name, phone, role);
+                if(insert){
+                    Toast.makeText(MainActivity.this, "Registered Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(MainActivity.this, "Registration Failed", Toast.LENGTH_SHORT).show();
+                }
+            }else{
+                Toast.makeText(MainActivity.this, "User already exists! Please Sign In", Toast.LENGTH_SHORT).show();
             }
-
-            // For now, just show a success message
-            Toast.makeText(MainActivity.this, "Register button clicked!", Toast.LENGTH_SHORT).show();
-
-            // TODO: We will add Firebase logic here in the next step
         });
 
-        // 3. Handle "Go to Login" Click
         tvGoToLogin.setOnClickListener(v -> {
-            // We will create the LoginActivity next, so just a toast for now
-            Toast.makeText(MainActivity.this, "Navigating to Login...", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         });
     }
 }
